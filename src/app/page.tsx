@@ -149,35 +149,26 @@ export default function Home() {
   };
 
   return (
-    <main className="flex-1 w-full max-w-6xl mx-auto p-4 md:p-8 flex flex-col justify-center">
+    <main className="flex-1 w-full max-w-6xl mx-auto p-4 md:p-8 flex flex-col">
       
-      {/* Header section is simplified when showing results */}
-      {appState === "idle" || appState === "error" ? (
-        <div className="text-center max-w-2xl mx-auto mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-blue-600 mb-4">
-            Sistem Skrining Indikasi Glaukoma
-          </h1>
-          <p className="text-gray-600 text-lg mb-4">
-            Unggah citra fundus retina Anda untuk menganalisis indikasi risiko glaukoma berdasarkan rasio Cup-to-Disc (CDR) secara otomatis.
-          </p>
-          <div className="bg-blue-50 text-blue-800 text-sm p-4 rounded-lg text-left">
-            <strong>Informasi Privasi:</strong> Citra Anda dikirim langsung ke server inferensi Hugging Face untuk dianalisis. Tidak ada gambar yang disimpan di infrastruktur web kami, meskipun file sementara mungkin ada di server inferensi selama proses berjalan.
-          </div>
-        </div>
-      ) : (
-        <div className="text-center mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
-            Hasil Analisis Citra Fundus
-          </h1>
-        </div>
-      )}
+      {/* Brand & Subtitle */}
+      <div className="text-center max-w-3xl mx-auto mb-8">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-blue-700 tracking-tight mb-2">
+          GF-CARE
+        </h1>
+        <h2 className="text-lg md:text-xl font-medium text-gray-600 mb-4">
+          Glaucoma Fundus &ndash; Cup-to-Disc Ratio Assessment for Retinal Evaluation
+        </h2>
+        <p className="text-gray-500 text-base md:text-lg">
+          Unggah citra fundus retina Anda untuk menganalisis indikasi risiko glaukoma berdasarkan rasio Cup-to-Disc (CDR) secara otomatis.
+        </p>
+      </div>
 
       {/* Main Content Area */}
-      <div className="w-full">
-        
+      <div className="w-full flex-1 flex flex-col">
         {/* Error Message */}
         {appState === "error" && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 max-w-2xl mx-auto" role="alert">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 max-w-2xl mx-auto w-full" role="alert">
             <strong className="font-bold">Error! </strong>
             <span className="block sm:inline">{errorMessage}</span>
           </div>
@@ -185,7 +176,7 @@ export default function Home() {
 
         {/* Upload State */}
         {(appState === "idle" || appState === "error") && (
-          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-200 max-w-2xl mx-auto text-center">
+          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-200 max-w-2xl mx-auto w-full text-center">
              <input 
               type="file" 
               ref={fileInputRef}
@@ -207,7 +198,7 @@ export default function Home() {
 
         {/* Loading States */}
         {["validating", "connecting", "uploading", "processing"].includes(appState) && (
-          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-200 max-w-2xl mx-auto text-center flex flex-col items-center">
+          <div className="bg-white p-10 rounded-2xl shadow-lg border border-gray-200 max-w-2xl mx-auto w-full text-center flex flex-col items-center">
             <div className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-6"></div>
             
             <h2 className="text-2xl font-semibold mb-2">
@@ -232,121 +223,118 @@ export default function Home() {
 
         {/* Success State (Results Dashboard) */}
         {appState === "success" && metrics && (
-          <div className="animate-in fade-in duration-500">
-            {/* Images Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                  <h2 className="text-2xl font-semibold mb-4 text-center">Citra Fundus Original</h2>
-                  <div className="w-full aspect-square bg-black rounded-lg overflow-hidden relative">
-                    {originalImage && (
-                      <img src={originalImage} alt="Citra Fundus Original" className="w-full h-full object-contain" />
-                    )}
-                  </div>
-              </div>
-              <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
-                  <h2 className="text-2xl font-semibold mb-4 text-center">Hasil Segmentasi (Overlay)</h2>
-                  <div className="w-full aspect-square bg-black rounded-lg overflow-hidden relative">
+          <div className="animate-in fade-in duration-500 max-w-5xl mx-auto w-full">
+            <h3 className="text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">Hasil Analisis</h3>
+            
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex flex-col md:flex-row">
+              {/* Left Column: Overlay Image */}
+              <div className="w-full md:w-1/2 bg-gray-50 p-6 border-b md:border-b-0 md:border-r border-gray-200 flex flex-col">
+                <h4 className="text-lg font-semibold mb-4 text-center text-gray-700">Segmentasi Overlay</h4>
+                <div className="flex-1 flex flex-col justify-center items-center">
+                  <div className="w-full max-w-sm aspect-square bg-black rounded-lg overflow-hidden relative shadow-inner">
                     {resultImage && (
-                      <img src={resultImage} alt="Hasil Segmentasi" className="w-full h-full object-contain" />
+                      <img src={resultImage} alt="Hasil Segmentasi Overlay" className="w-full h-full object-contain" />
                     )}
                   </div>
-                  <div className="flex items-center justify-center space-x-6 mt-4">
+                  <div className="flex items-center justify-center space-x-6 mt-6">
                       <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 rounded-full bg-blue-500 border border-white"></div>
-                        <span className="text-sm font-medium">Optic Disc</span>
+                        <div className="w-4 h-4 rounded-full bg-blue-500 shadow-sm border border-white"></div>
+                        <span className="text-sm font-medium text-gray-600">Optic Disc</span>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <div className="w-4 h-4 rounded-full bg-red-500 border border-white"></div>
-                        <span className="text-sm font-medium">Optic Cup</span>
+                        <div className="w-4 h-4 rounded-full bg-red-500 shadow-sm border border-white"></div>
+                        <span className="text-sm font-medium text-gray-600">Optic Cup</span>
                       </div>
                   </div>
+                </div>
               </div>
-            </div>
 
-            {/* Quantitative Analysis Card */}
-            <div className="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-gray-200 mb-8 max-w-5xl mx-auto">
-              <h2 className="text-2xl font-semibold mb-6 text-center">Data Analisis Kuantitatif</h2>
-              
-              {/* Diagnosis Summary Banner */}
-              <div className="mb-8 pt-4 pb-6 border-b text-center">
-                  <h3 className="text-lg font-medium text-gray-500 mb-2">Indikasi Skrining (vCDR &gt; {metrics.cdr_threshold})</h3>
-                  
+              {/* Right Column: Metrics & Indication */}
+              <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col">
+                {/* Screening Indication */}
+                <div className="text-center mb-6 pb-6 border-b border-gray-100">
+                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wider mb-2">Indikasi Skrining</p>
                   {metrics.diagnosis === 'Glaukoma' ? (
                     <div>
-                      <div className="bg-red-50 text-red-700 text-2xl font-bold py-3 px-6 rounded-xl inline-block border border-red-200">
+                      <div className="bg-red-50 text-red-700 text-xl md:text-2xl font-bold py-2 px-6 rounded-lg border border-red-200 inline-block">
                         Terindikasi Glaukoma
                       </div>
-                      <p className="text-red-600 mt-3 font-medium">{metrics.diagnosis_description}</p>
                     </div>
                   ) : (
                     <div>
-                      <div className="bg-green-50 text-green-700 text-2xl font-bold py-3 px-6 rounded-xl inline-block border border-green-200">
+                      <div className="bg-green-50 text-green-700 text-xl md:text-2xl font-bold py-2 px-6 rounded-lg border border-green-200 inline-block">
                         Indikasi Normal
                       </div>
-                      <p className="text-green-600 mt-3 font-medium">{metrics.diagnosis_description}</p>
                     </div>
                   )}
-              </div>
+                </div>
 
-              {/* Metrics Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-lg">
-                  <div className="space-y-4">
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Diameter Vertikal Disc</p>
-                        <p className="font-bold text-xl">{metrics.vd_od}</p>
-                      </div>
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Diameter Vertikal Cup</p>
-                        <p className="font-bold text-xl">{metrics.vd_oc}</p>
-                      </div>
-                      <div className="bg-blue-50 p-4 rounded-xl border-2 border-blue-200 flex flex-col justify-between h-full">
-                        <p className="text-sm font-semibold text-blue-800 mb-1">Vertical CDR (vCDR)</p>
-                        <p className="font-bold text-2xl text-blue-900">{metrics.vcdr.toFixed(3)}</p>
-                      </div>
+                {/* Metrics Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div className="bg-blue-50 p-4 rounded-xl border border-blue-100 col-span-2 sm:col-span-1">
+                    <p className="text-xs font-semibold text-blue-800 uppercase tracking-wide mb-1">Vertical CDR</p>
+                    <p className="font-bold text-2xl text-blue-900">{metrics.vcdr.toFixed(3)}</p>
                   </div>
-                  <div className="space-y-4">
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Diameter Horizontal Disc</p>
-                        <p className="font-bold text-xl">{metrics.hd_od}</p>
-                      </div>
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Diameter Horizontal Cup</p>
-                        <p className="font-bold text-xl">{metrics.hd_oc}</p>
-                      </div>
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Horizontal CDR (hCDR)</p>
-                        <p className="font-bold text-xl">{metrics.hcdr.toFixed(3)}</p>
-                      </div>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 col-span-2 sm:col-span-1">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Horizontal CDR</p>
+                    <p className="font-bold text-xl text-gray-800">{metrics.hcdr.toFixed(3)}</p>
                   </div>
-                  <div className="space-y-4">
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Luas Area Disc</p>
-                        <p className="font-bold text-xl">{metrics.area_od}</p>
-                      </div>
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Luas Area Cup</p>
-                        <p className="font-bold text-xl">{metrics.area_oc}</p>
-                      </div>
-                      <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 flex flex-col justify-between h-full">
-                        <p className="text-sm text-gray-500 mb-1">Area CDR</p>
-                        <p className="font-bold text-xl">{metrics.area_cdr.toFixed(3)}</p>
-                      </div>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 col-span-2 sm:col-span-1">
+                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">Area CDR</p>
+                    <p className="font-bold text-xl text-gray-800">{metrics.area_cdr.toFixed(3)}</p>
                   </div>
-              </div>
-            </div>
+                  <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 col-span-2 sm:col-span-1 flex flex-col justify-center">
+                    <p className="text-xs text-gray-500 mb-1">Batas Aman vCDR</p>
+                    <p className="font-medium text-gray-700">&le; {metrics.cdr_threshold}</p>
+                  </div>
+                </div>
 
-            <div className="text-center mt-10 mb-8">
-                <button 
-                  onClick={resetState}
-                  className="bg-gray-100 text-gray-800 font-bold py-3 px-8 rounded-lg shadow-sm border border-gray-200 hover:bg-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 transition-all duration-300"
-                >
-                  Mulai Analisis Baru
-                </button>
+                {/* Additional metrics */}
+                <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm text-gray-600 mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                  <div className="flex justify-between"><span>Vert. Disc:</span> <span className="font-medium">{metrics.vd_od}</span></div>
+                  <div className="flex justify-between"><span>Vert. Cup:</span> <span className="font-medium">{metrics.vd_oc}</span></div>
+                  <div className="flex justify-between"><span>Horiz. Disc:</span> <span className="font-medium">{metrics.hd_od}</span></div>
+                  <div className="flex justify-between"><span>Horiz. Cup:</span> <span className="font-medium">{metrics.hd_oc}</span></div>
+                  <div className="flex justify-between"><span>Area Disc:</span> <span className="font-medium">{metrics.area_od}</span></div>
+                  <div className="flex justify-between"><span>Area Cup:</span> <span className="font-medium">{metrics.area_oc}</span></div>
+                </div>
+
+                {/* Explanation */}
+                <div className="bg-gray-50 p-4 rounded-xl text-sm text-gray-700 border border-gray-100 flex-1">
+                  <strong className="block mb-1 text-gray-800">Keterangan:</strong>
+                  {metrics.diagnosis_description}
+                </div>
+
+                <div className="text-center mt-8">
+                    <button 
+                      onClick={resetState}
+                      className="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-colors"
+                    >
+                      Mulai Analisis Baru
+                    </button>
+                </div>
+              </div>
             </div>
           </div>
         )}
-
       </div>
+
+      {/* Responsible AI / Medical Warning */}
+      <div className="max-w-4xl mx-auto w-full mt-12 bg-amber-50 border border-amber-200 rounded-xl p-6 mb-8 shadow-sm">
+        <h3 className="text-amber-800 font-bold text-lg mb-2">Peringatan Medis / Medical Disclaimer</h3>
+        <p className="text-amber-700 text-sm leading-relaxed">
+          GF-CARE adalah alat penelitian untuk segmentasi citra fundus berdasarkan rasio Cup-to-Disc. 
+          Sistem ini <strong>BUKAN</strong> merupakan sistem diagnosis medis yang definitif. 
+          Hasil skrining tidak dapat menggantikan penilaian klinis profesional. 
+          Harap konsultasikan dengan dokter spesialis mata (Oftalmologis) untuk pemeriksaan dan diagnosis yang akurat.
+        </p>
+      </div>
+
+      {/* Privacy Information */}
+      <div className="max-w-4xl mx-auto w-full text-center text-xs text-gray-500 mb-4 px-4">
+        <strong>Informasi Privasi:</strong> Citra Anda dikirim langsung ke server inferensi Hugging Face untuk dianalisis. Tidak ada gambar yang disimpan di infrastruktur web kami, meskipun file sementara mungkin ada di server inferensi selama proses berjalan.
+      </div>
+      
     </main>
   );
 }
